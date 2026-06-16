@@ -10,11 +10,12 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Light */
-      --bg: #f1f4f9;
-      --bg-grad: radial-gradient(circle at 20% 0%, #e0e9f7 0%, transparent 60%), radial-gradient(circle at 80% 100%, #f1e7d4 0%, transparent 50%), #f1f4f9;
+      --bg: #f0f4f8;
+      --bg-grad: radial-gradient(circle at 20% 0%, #dde8f8 0%, transparent 55%),
+                 radial-gradient(circle at 80% 100%, #e8f0fb 0%, transparent 50%), #f0f4f8;
       --card: #ffffff;
-      --card-soft: #f8fafc;
+      --card-soft: #f7fafd;
+      --card-rgb: 255,255,255;
       --text: #0f172a; --text2: #475569; --text3: #94a3b8;
       --border: #e2e8f0; --border2: #cbd5e1;
       --accent: #174E9C; --accent2: #1e5fc2;
@@ -22,21 +23,25 @@
       --green: #16a34a;
       --red: #dc2626; --red-bg: #fef2f2; --red-b: #fecaca;
       --shadow-sm: 0 1px 3px rgba(15,23,42,.05), 0 1px 2px rgba(15,23,42,.04);
-      --shadow: 0 4px 6px -1px rgba(15,23,42,.06), 0 2px 4px -2px rgba(15,23,42,.06);
-      --shadow-lg: 0 10px 25px -3px rgba(15,23,42,.1), 0 4px 6px -4px rgba(15,23,42,.08);
+      --shadow: 0 4px 12px -2px rgba(15,23,42,.07), 0 2px 4px -2px rgba(15,23,42,.05);
+      --shadow-lg: 0 20px 40px -8px rgba(15,23,42,.12), 0 8px 16px -4px rgba(15,23,42,.08);
     }
 
     [data-theme="dark"] {
-      --bg: #050a18;
-      --bg-grad: radial-gradient(circle at 15% 10%, rgba(23,78,156,0.18) 0%, transparent 50%), radial-gradient(circle at 85% 90%, rgba(245,158,11,0.08) 0%, transparent 50%), #050a18;
-      --card: #0f172a;
-      --card-soft: #131c2e;
+      --bg: #030712;
+      --bg-grad: radial-gradient(ellipse at 20% 10%, rgba(23,78,156,0.22) 0%, transparent 55%),
+                 radial-gradient(ellipse at 80% 85%, rgba(245,158,11,0.09) 0%, transparent 50%),
+                 radial-gradient(ellipse at 60% 50%, rgba(30,95,194,0.08) 0%, transparent 60%),
+                 #030712;
+      --card: #0D1526;
+      --card-soft: #111827;
+      --card-rgb: 13,21,38;
       --text: #f1f5f9; --text2: #cbd5e1; --text3: #64748b;
-      --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
+      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.13);
       --gold-soft: rgba(245,158,11,0.15);
-      --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
-      --shadow: 0 4px 8px rgba(0,0,0,.4);
-      --shadow-lg: 0 12px 30px rgba(0,0,0,.5);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.5);
+      --shadow: 0 4px 12px rgba(0,0,0,.45);
+      --shadow-lg: 0 20px 50px rgba(0,0,0,.6);
       --red-bg: #2a0f0f; --red-b: rgba(220,38,38,0.25);
     }
 
@@ -45,203 +50,282 @@
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       background: var(--bg);
       background-image: var(--bg-grad);
+      background-attachment: fixed;
       color: var(--text);
-      min-height: 100vh; line-height: 1.5;
-      transition: background-color .25s, color .25s;
+      min-height: 100vh;
+      line-height: 1.6;
+      transition: background-color .3s, color .3s;
     }
     body.hide-app .app { display: none !important; }
     body.hide-login .login-screen { display: none !important; }
 
-    .display { font-family: 'Manrope', sans-serif; letter-spacing: -0.02em; }
+    .display { font-family: 'Manrope', sans-serif; letter-spacing: -0.025em; }
 
-    /* ══════════ LOGIN ══════════ */
+    /* ════════════════════════════════
+       LOGIN SCREEN
+    ════════════════════════════════ */
     .login-screen {
       position: fixed; inset: 0;
       display: flex; align-items: center; justify-content: center;
       padding: 20px;
-      background: linear-gradient(135deg, #050b1f 0%, #0a1638 30%, #133572 70%, #174E9C 100%);
+      background: linear-gradient(145deg, #050b1f 0%, #081230 25%, #0f2460 65%, #174E9C 100%);
       z-index: 1000;
       overflow-y: auto;
     }
+    /* Ambient glow orbs */
     .login-screen::before {
-      content: ''; position: absolute; inset: 0;
-      background-image:
-        radial-gradient(circle at 15% 25%, rgba(255,215,0,0.12) 0%, transparent 40%),
-        radial-gradient(circle at 85% 75%, rgba(59,130,246,0.18) 0%, transparent 50%);
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 18% 28%, rgba(255,215,0,0.13) 0%, transparent 42%),
+        radial-gradient(ellipse at 82% 72%, rgba(59,130,246,0.2) 0%, transparent 48%),
+        radial-gradient(ellipse at 55% 15%, rgba(23,78,156,0.25) 0%, transparent 38%);
       pointer-events: none;
     }
+    /* Animated grid mesh */
     .login-screen::after {
       content: ''; position: absolute; inset: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 80% at center, black 0%, transparent 100%);
+      animation: meshShift 20s linear infinite;
       pointer-events: none;
     }
+    @keyframes meshShift {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 48px 48px, 48px 48px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .login-screen::after { animation: none; }
+    }
+
     .login-card {
-      position: relative; background: #fff;
+      position: relative;
+      background: #fff;
       z-index: 1;
-      border-radius: 20px; padding: 40px 36px 32px;
-      width: 100%; max-width: 440px;
-      box-shadow: 0 30px 60px -12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 44px 38px 34px;
+      width: 100%; max-width: 448px;
+      box-shadow:
+        0 40px 80px -16px rgba(0,0,0,0.5),
+        0 0 0 1px rgba(255,255,255,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.9);
     }
     .login-flag {
       position: absolute; top: 0; left: 0; right: 0;
-      height: 5px; display: flex;
-      border-radius: 20px 20px 0 0; overflow: hidden;
+      height: 6px; display: flex;
+      border-radius: 22px 22px 0 0; overflow: hidden;
     }
     .login-flag > div { flex: 1; }
     .login-flag > div:nth-child(1) { background: #0066FF; }
     .login-flag > div:nth-child(2) { background: #FFD700; }
     .login-flag > div:nth-child(3) { background: #FF0000; }
 
-    .login-logo { display: flex; justify-content: center; margin-bottom: 14px; }
+    .login-logo {
+      display: flex; justify-content: center;
+      margin-bottom: 18px;
+    }
     .login-logo img {
-      height: 64px;
+      height: 72px;
       object-fit: contain;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+      filter: drop-shadow(0 6px 16px rgba(0,0,0,0.12));
     }
     .login-title {
       font-family: 'Manrope', sans-serif;
-      font-size: 24px; font-weight: 800;
+      font-size: 26px; font-weight: 800;
       text-align: center; color: #0f172a;
-      letter-spacing: -0.02em; margin-bottom: 4px;
+      letter-spacing: -0.025em; margin-bottom: 6px;
     }
-    .login-subtitle { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 28px; }
+    .login-subtitle {
+      text-align: center;
+      color: #64748b;
+      font-size: 13.5px;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
 
-    .input-group { margin-bottom: 16px; }
+    .input-group { margin-bottom: 18px; }
     .input-group label {
-      display: block; font-size: 11.5px; font-weight: 700;
-      color: #334155; margin-bottom: 6px;
-      text-transform: uppercase; letter-spacing: 0.05em;
+      display: block;
+      font-size: 11px; font-weight: 700;
+      color: #334155;
+      margin-bottom: 7px;
+      text-transform: uppercase; letter-spacing: 0.07em;
     }
     .input-wrap { position: relative; }
     .input-wrap svg {
       position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: #94a3b8; pointer-events: none;
+      color: #94a3b8; pointer-events: none; flex-shrink: 0;
     }
     .input-wrap input {
-      width: 100%; padding: 13px 14px 13px 44px;
-      border: 1.5px solid #e2e8f0; border-radius: 11px;
+      width: 100%;
+      padding: 13px 14px 13px 46px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
       font-size: 14px; font-family: inherit;
-      color: #0f172a; background: #fff;
-      transition: border-color .15s, box-shadow .15s;
+      color: #0f172a; background: #fafbfc;
+      transition: border-color .15s, box-shadow .15s, background .15s;
     }
     .input-wrap input:focus {
-      outline: none; border-color: #174E9C;
+      outline: none;
+      border-color: #174E9C;
+      background: #fff;
       box-shadow: 0 0 0 4px rgba(23,78,156,.1);
     }
+    .input-wrap input::placeholder { color: #b0bec5; }
 
     .btn-login {
       width: 100%;
-      background: linear-gradient(135deg, #174E9C, #1e5fc2);
+      background: linear-gradient(135deg, #174E9C 0%, #1e5fc2 60%, #2563eb 100%);
       color: #fff; border: none;
-      padding: 14px; border-radius: 11px;
-      font-family: inherit; font-size: 14px; font-weight: 700;
-      letter-spacing: 0.02em;
-      cursor: pointer; transition: all .2s;
-      box-shadow: 0 4px 14px rgba(23,78,156,.3);
+      padding: 15px;
+      border-radius: 12px;
+      font-family: inherit; font-size: 14.5px; font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all .2s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 4px 16px rgba(23,78,156,.35), inset 0 1px 0 rgba(255,255,255,.15);
       margin-top: 10px;
+      position: relative;
+      overflow: hidden;
     }
+    .btn-login::before {
+      content: '';
+      position: absolute; top: -50%; left: -60%;
+      width: 30%; height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      transform: skewX(-20deg);
+      transition: left .5s ease;
+    }
+    .btn-login:hover:not(:disabled)::before { left: 130%; }
     .btn-login:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(23,78,156,.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(23,78,156,.45);
     }
-    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-login:active:not(:disabled) { transform: translateY(0); }
+    .btn-login:disabled { opacity: 0.65; cursor: not-allowed; }
 
     .login-error {
-      background: #fef2f2; border: 1px solid #fecaca;
-      color: #b91c1c; padding: 11px 14px;
-      border-radius: 9px; font-size: 13px;
-      margin-bottom: 14px; display: none;
+      background: #fef2f2; border: 1.5px solid #fecaca;
+      color: #b91c1c; padding: 12px 15px;
+      border-radius: 10px; font-size: 13px;
+      margin-bottom: 16px; display: none;
+      font-weight: 500;
     }
     .login-error.show { display: block; }
 
     .login-foot {
-      text-align: center; margin-top: 26px;
-      padding-top: 20px; border-top: 1px solid #f1f5f9;
-      color: #94a3b8; font-size: 11px;
+      text-align: center; margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid #f1f5f9;
     }
-    .login-foot strong { color: #475569; }
+    .login-foot-logo {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; margin-bottom: 8px;
+    }
+    .login-foot-flag {
+      display: flex; width: 18px; height: 12px; border-radius: 2px; overflow: hidden;
+    }
+    .login-foot-flag > span { flex: 1; }
+    .login-foot-flag > span:nth-child(1) { background: #0066FF; }
+    .login-foot-flag > span:nth-child(2) { background: #FFD700; }
+    .login-foot-flag > span:nth-child(3) { background: #FF0000; }
+    .login-foot p {
+      color: #94a3b8; font-size: 11px; line-height: 1.7;
+    }
+    .login-foot strong { color: #64748b; font-weight: 700; }
 
-    /* ══════════ HEADER ══════════ */
+    /* ════════════════════════════════
+       HEADER
+    ════════════════════════════════ */
     .hdr {
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      backdrop-filter: blur(12px);
+      background: rgba(var(--card-rgb), 0.85);
+      border-bottom: 1px solid transparent;
+      background-clip: padding-box;
+      box-shadow: var(--shadow-sm), 0 1px 0 var(--border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       position: sticky; top: 0; z-index: 50;
     }
     .hdr-inner {
-      max-width: 1280px; margin: 0 auto;
-      padding: 16px 28px;
+      max-width: 1320px; margin: 0 auto;
+      padding: 14px 28px;
       display: flex; justify-content: space-between; align-items: center;
       gap: 16px;
     }
     .hdr-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
     .hdr-logo {
       flex-shrink: 0;
-      height: 48px; width: auto;
+      height: 44px; width: auto;
       display: flex; align-items: center;
     }
     .hdr-logo img {
-      height: 48px; width: auto;
+      height: 44px; width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 2px 8px rgba(23,78,156,0.12));
+      filter: drop-shadow(0 2px 8px rgba(23,78,156,0.1));
     }
     [data-theme="dark"] .hdr-logo img {
-      background: rgba(255,255,255,0.96);
+      background: rgba(255,255,255,0.95);
       padding: 4px 8px;
       border-radius: 8px;
       filter: drop-shadow(0 2px 12px rgba(0,0,0,0.4));
     }
+    .hdr-divider {
+      width: 1px; height: 32px;
+      background: var(--border2);
+      flex-shrink: 0;
+    }
     .hdr-txt { min-width: 0; }
     .hdr-txt h1 {
       font-family: 'Manrope', sans-serif;
-      font-size: 17px; font-weight: 800;
-      color: var(--text); letter-spacing: -0.01em;
+      font-size: 16px; font-weight: 800;
+      color: var(--text); letter-spacing: -0.02em;
       line-height: 1.2;
     }
     .hdr-txt p {
-      font-size: 11px; color: var(--text3);
-      margin-top: 2px; letter-spacing: 0.04em;
+      font-size: 10.5px; color: var(--text3);
+      margin-top: 2px; letter-spacing: 0.06em;
       text-transform: uppercase; font-weight: 600;
     }
     .hdr-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
     .icon-btn {
       display: inline-flex; align-items: center; gap: 7px;
-      background: transparent; border: 1px solid var(--border);
+      background: transparent;
+      border: 1px solid var(--border);
       color: var(--text2);
-      padding: 8px 13px; border-radius: 10px;
+      padding: 8px 14px;
+      border-radius: 10px;
       font-family: inherit; font-size: 12.5px; font-weight: 600;
-      cursor: pointer; transition: all .15s;
+      cursor: pointer;
+      transition: all .15s cubic-bezier(0.4,0,0.2,1);
     }
     .icon-btn:hover {
       background: var(--card-soft);
       border-color: var(--border2);
       color: var(--text);
     }
-    .icon-btn svg { width: 14px; height: 14px; }
+    .icon-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
     .icon-btn.gold {
       background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      color: #422006; border-color: transparent;
+      color: #422006;
+      border: 1px solid rgba(245,158,11,0.3);
       font-weight: 700;
       box-shadow: 0 2px 8px rgba(245,158,11,0.3);
     }
     .icon-btn.gold:hover {
       background: linear-gradient(135deg, #f59e0b, #d97706);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(245,158,11,0.4);
+      box-shadow: 0 4px 14px rgba(245,158,11,0.4);
       color: #422006;
     }
     .icon-btn.gold.active {
       background: linear-gradient(135deg, #d97706, #b45309);
       color: #fff;
     }
-
     .icon-btn.danger:hover {
       background: var(--red-bg);
       border-color: var(--red);
@@ -250,79 +334,123 @@
 
     .status-pill {
       display: inline-flex; align-items: center; gap: 7px;
-      background: linear-gradient(135deg, #16a34a, #15803d);
-      color: #fff;
-      padding: 7px 12px; border-radius: 20px;
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.05em;
-      box-shadow: 0 2px 10px rgba(22,163,74,.25);
+      background: linear-gradient(135deg, rgba(22,163,74,0.15), rgba(21,128,61,0.1));
+      border: 1px solid rgba(22,163,74,0.25);
+      color: #16a34a;
+      padding: 6px 12px; border-radius: 20px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.07em;
     }
+    [data-theme="dark"] .status-pill { color: #4ade80; border-color: rgba(74,222,128,0.25); background: rgba(22,163,74,0.12); }
     .status-pill .dot {
-      width: 6px; height: 6px; background: #fff;
-      border-radius: 50%; animation: blink 1.5s infinite;
+      width: 6px; height: 6px;
+      background: #16a34a;
+      border-radius: 50%;
+      animation: blink 1.8s ease-in-out infinite;
+      box-shadow: 0 0 0 2px rgba(22,163,74,0.2);
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
-    @media (max-width: 800px) { .status-pill { display: none; } }
+    [data-theme="dark"] .status-pill .dot { background: #4ade80; box-shadow: 0 0 0 2px rgba(74,222,128,0.2); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    @media (max-width: 860px) { .status-pill { display: none; } }
 
     .user-chip {
       display: inline-flex; align-items: center; gap: 9px;
       background: linear-gradient(135deg, rgba(23,78,156,0.08), rgba(30,95,194,0.05));
       border: 1px solid rgba(23,78,156,0.2);
-      padding: 5px 14px 5px 5px; border-radius: 22px;
-      font-size: 12px; font-weight: 700;
+      padding: 5px 13px 5px 5px;
+      border-radius: 22px;
+      font-size: 12.5px; font-weight: 700;
       color: var(--text);
       font-family: inherit;
-      cursor: pointer; transition: all .15s;
+      cursor: pointer;
+      transition: all .15s cubic-bezier(0.4,0,0.2,1);
     }
     .user-chip:hover {
       background: linear-gradient(135deg, rgba(23,78,156,0.15), rgba(30,95,194,0.1));
       border-color: rgba(23,78,156,0.35);
       transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(23,78,156,.12);
     }
     [data-theme="dark"] .user-chip {
-      background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(23,78,156,0.1));
-      border-color: rgba(59,130,246,0.25);
+      background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(23,78,156,0.08));
+      border-color: rgba(59,130,246,0.2);
+    }
+    [data-theme="dark"] .user-chip:hover {
+      background: linear-gradient(135deg, rgba(59,130,246,0.18), rgba(23,78,156,0.14));
+      border-color: rgba(59,130,246,0.35);
     }
     .user-chip .avatar {
-      width: 28px; height: 28px;
+      width: 30px; height: 30px;
       background: linear-gradient(135deg, #FFD700, #f59e0b);
-      color: #422006; border-radius: 50%;
+      color: #422006;
+      border-radius: 50%;
       display: inline-flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 800;
+      font-size: 11.5px; font-weight: 800;
       box-shadow: 0 2px 8px rgba(245,158,11,0.4);
       font-family: 'Manrope', sans-serif;
+      flex-shrink: 0;
     }
+    .user-chip .chevron { opacity: .45; }
 
     .flag-ribbon {
-      height: 4px; display: flex;
+      height: 3px; display: flex;
       background: linear-gradient(90deg, #0066FF 0 33.33%, #FFD700 33.33% 66.66%, #FF0000 66.66%);
+      opacity: 0.7;
     }
 
-    /* ══════════ MAIN ══════════ */
-    .main { max-width: 1280px; margin: 0 auto; padding: 36px 28px 48px; }
+    /* ════════════════════════════════
+       MAIN LAYOUT
+    ════════════════════════════════ */
+    .main { max-width: 1320px; margin: 0 auto; padding: 40px 28px 56px; }
 
     .toolbar {
-      display: flex; justify-content: space-between; align-items: end;
-      margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 28px; flex-wrap: wrap; gap: 20px;
     }
+    .sec-head { }
+    .sec-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, rgba(23,78,156,0.1), rgba(30,95,194,0.07));
+      border: 1px solid rgba(23,78,156,0.2);
+      color: var(--accent);
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    [data-theme="dark"] .sec-badge {
+      background: rgba(59,130,246,0.1);
+      border-color: rgba(59,130,246,0.2);
+      color: #93c5fd;
+    }
+    .sec-badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    [data-theme="dark"] .sec-badge::before { background: #93c5fd; }
     .sec-head h2 {
       font-family: 'Manrope', sans-serif;
-      font-size: 28px; font-weight: 800;
-      letter-spacing: -0.025em; line-height: 1.1;
+      font-size: 30px; font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.1;
       color: var(--text);
     }
     .sec-head p {
-      font-size: 13px; color: var(--text3);
-      margin-top: 6px; max-width: 540px;
+      font-size: 14px; color: var(--text3);
+      margin-top: 7px; max-width: 500px;
+      line-height: 1.65;
     }
 
     .search {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 9px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 11px 16px;
       transition: all .2s;
       box-shadow: var(--shadow-sm);
-      min-width: 280px;
+      min-width: 290px;
     }
     .search:focus-within {
       border-color: var(--accent);
@@ -336,301 +464,353 @@
     .search input::placeholder { color: var(--text3); }
     .search-ico { color: var(--text3); flex-shrink: 0; }
 
-    /* App cards grid */
+    /* ════════════════════════════════
+       APP CARDS
+    ════════════════════════════════ */
     .apps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 18px;
     }
 
     .app-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      transition: all .25s ease;
+      border-radius: 18px;
+      padding: 0;
+      transition: all .25s cubic-bezier(0.4,0,0.2,1);
       box-shadow: var(--shadow-sm);
-      display: flex; flex-direction: column; gap: 14px;
+      display: flex; flex-direction: column;
       position: relative; overflow: hidden;
+      cursor: default;
     }
-    .app-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      opacity: 0; transition: opacity .25s;
-      pointer-events: none;
+    /* Colored top accent bar */
+    .app-card-accent {
+      height: 4px;
+      width: 100%;
+      opacity: 0;
+      transition: opacity .25s cubic-bezier(0.4,0,0.2,1);
     }
     .app-card:hover {
       border-color: var(--border2);
       box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
     }
-    .app-card:hover::before { opacity: 1; }
+    .app-card:hover .app-card-accent { opacity: 1; }
 
-    .app-head { display: flex; align-items: center; gap: 12px; }
-    .app-icon {
-      width: 44px; height: 44px;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      background: linear-gradient(135deg, var(--card-soft), var(--card));
-      border: 1px solid var(--border);
-      flex-shrink: 0;
+    .app-card-body {
+      padding: 22px 22px 16px;
+      display: flex; flex-direction: column; gap: 16px;
+      flex: 1;
     }
+
+    .app-head { display: flex; align-items: flex-start; gap: 14px; }
+    .app-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    }
+    .app-icon svg { width: 26px; height: 26px; color: #fff; }
+
+    .app-meta { flex: 1; min-width: 0; padding-top: 2px; }
     .app-name {
       font-family: 'Manrope', sans-serif;
-      font-size: 15.5px; font-weight: 700;
+      font-size: 15.5px; font-weight: 800;
       color: var(--text);
       line-height: 1.2;
+      letter-spacing: -0.01em;
     }
     .app-desc {
-      font-size: 11.5px;
+      font-size: 12.5px;
       color: var(--text3);
-      margin-top: 3px;
-      letter-spacing: 0.02em;
+      margin-top: 4px;
+      line-height: 1.5;
     }
 
     .app-links {
-      display: flex; flex-wrap: wrap; gap: 7px;
-      margin-top: auto;
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 0 22px 20px;
     }
     .lnk {
-      display: inline-flex; align-items: center; gap: 4px;
+      display: inline-flex; align-items: center; gap: 5px;
       background: transparent;
       color: var(--accent);
-      border: 1px solid var(--border);
-      padding: 6px 12px; border-radius: 8px;
-      font-size: 12px; font-weight: 600;
+      border: 1.5px solid var(--border2);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 12px; font-weight: 700;
       text-decoration: none; cursor: pointer;
-      transition: all .18s;
+      transition: all .15s cubic-bezier(0.4,0,0.2,1);
       white-space: nowrap;
+      letter-spacing: 0.01em;
     }
-    [data-theme="dark"] .lnk { color: #93c5fd; }
+    [data-theme="dark"] .lnk {
+      color: #93c5fd;
+      border-color: rgba(147,197,253,0.2);
+    }
     .lnk:hover {
       background: var(--accent);
       color: #fff !important;
       border-color: var(--accent);
       transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(23,78,156,.25);
     }
     .lnk.pri {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: #fff !important;
-      border-color: var(--accent);
-      box-shadow: 0 2px 8px rgba(23,78,156,.25);
+      border-color: transparent;
+      box-shadow: 0 3px 10px rgba(23,78,156,.3);
     }
     .lnk.pri:hover {
       background: linear-gradient(135deg, #1e5fc2, #2563eb);
-      box-shadow: 0 4px 14px rgba(23,78,156,.35);
+      box-shadow: 0 6px 18px rgba(23,78,156,.4);
     }
-    .lnk.dis { opacity: .4; pointer-events: none; }
-    .lnk.ext::after { content: '↗'; font-size: 10px; opacity: .7; }
+    .lnk.dis { opacity: .35; pointer-events: none; }
+    .lnk-ext-icon {
+      width: 12px; height: 12px; opacity: .65; flex-shrink: 0;
+    }
 
     .nope {
       grid-column: 1 / -1;
-      text-align: center; padding: 60px 20px;
+      text-align: center; padding: 64px 20px;
       color: var(--text3); font-size: 14px;
       background: var(--card-soft);
-      border: 1px dashed var(--border);
-      border-radius: 14px;
+      border: 1.5px dashed var(--border2);
+      border-radius: 16px;
+      line-height: 1.7;
     }
+    .nope-icon { font-size: 28px; margin-bottom: 10px; }
 
-    /* ══════════ ADMIN PANEL ══════════ */
+    /* ════════════════════════════════
+       ADMIN PANEL
+    ════════════════════════════════ */
     .admin-panel { display: none; }
     .admin-panel.show { display: block; }
-    .admin-header { margin-bottom: 24px; }
+    .admin-header { margin-bottom: 28px; }
     .back-btn {
       display: inline-flex; align-items: center; gap: 7px;
       background: var(--card); border: 1px solid var(--border);
       color: var(--text2);
-      padding: 9px 14px 9px 11px; border-radius: 10px;
+      padding: 9px 16px 9px 12px; border-radius: 11px;
       font-family: inherit; font-size: 12.5px; font-weight: 600;
-      cursor: pointer; transition: all .15s;
-      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all .15s cubic-bezier(0.4,0,0.2,1);
+      margin-bottom: 18px;
       box-shadow: var(--shadow-sm);
     }
     .back-btn:hover {
       background: var(--accent);
       color: #fff; border-color: var(--accent);
-      transform: translateX(-2px);
-      box-shadow: 0 4px 12px rgba(23,78,156,.25);
+      transform: translateX(-3px);
+      box-shadow: 0 4px 14px rgba(23,78,156,.3);
     }
     .back-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
 
+    /* Tabs - pill style */
     .tabs {
-      display: flex; gap: 4px; margin-bottom: 24px;
-      border-bottom: 1px solid var(--border);
+      display: flex; gap: 6px;
+      margin-bottom: 24px;
+      background: var(--card-soft);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 5px;
+      width: fit-content;
     }
     .tab {
-      padding: 12px 20px; background: transparent; border: none;
+      padding: 9px 20px; background: transparent; border: none;
       font-family: inherit; font-size: 13px; font-weight: 600;
-      color: var(--text2); cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all .15s; margin-bottom: -1px;
+      color: var(--text3); cursor: pointer;
+      border-radius: 9px;
+      transition: all .15s cubic-bezier(0.4,0,0.2,1);
       display: inline-flex; align-items: center; gap: 7px;
     }
-    .tab:hover { color: var(--text); }
+    .tab:hover { color: var(--text); background: var(--border); }
     .tab.on {
       color: var(--accent);
-      border-bottom-color: var(--accent);
+      background: var(--card);
+      box-shadow: var(--shadow-sm);
+      font-weight: 700;
     }
-    [data-theme="dark"] .tab.on { color: #93c5fd; border-bottom-color: #93c5fd; }
-    .tab svg { width: 14px; height: 14px; }
+    [data-theme="dark"] .tab.on {
+      color: #93c5fd;
+      background: var(--card);
+    }
+    .tab svg { width: 15px; height: 15px; }
 
     .panel-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; box-shadow: var(--shadow);
+      border-radius: 16px; box-shadow: var(--shadow);
       overflow: hidden;
     }
     .panel-head {
-      padding: 18px 22px; border-bottom: 1px solid var(--border);
+      padding: 18px 24px; border-bottom: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 10px;
+      flex-wrap: wrap; gap: 12px;
       background: var(--card-soft);
     }
     .panel-head h3 {
       font-family: 'Manrope', sans-serif;
-      font-size: 15px; font-weight: 700;
+      font-size: 15px; font-weight: 800;
+      letter-spacing: -0.01em;
     }
     .panel-head .actions { display: flex; gap: 8px; }
 
     .btn-prim {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: #fff; border: none;
-      padding: 9px 16px; border-radius: 9px;
+      padding: 9px 16px; border-radius: 10px;
       font-family: inherit; font-size: 12.5px; font-weight: 700;
-      cursor: pointer; transition: all .15s;
+      cursor: pointer;
+      transition: all .15s cubic-bezier(0.4,0,0.2,1);
       display: inline-flex; align-items: center; gap: 6px;
-      box-shadow: 0 2px 8px rgba(23,78,156,.25);
+      box-shadow: 0 3px 10px rgba(23,78,156,.3);
     }
     .btn-prim:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(23,78,156,.35);
+      box-shadow: 0 6px 18px rgba(23,78,156,.4);
     }
     .btn-sec {
       background: transparent; color: var(--text2);
-      border: 1px solid var(--border); padding: 8px 14px;
-      border-radius: 9px; font-family: inherit;
+      border: 1px solid var(--border); padding: 9px 16px;
+      border-radius: 10px; font-family: inherit;
       font-size: 12.5px; font-weight: 600;
-      cursor: pointer; transition: all .15s;
+      cursor: pointer;
+      transition: all .15s;
     }
-    .btn-sec:hover { background: var(--card-soft); color: var(--text); }
+    .btn-sec:hover { background: var(--card-soft); color: var(--text); border-color: var(--border2); }
     .btn-danger {
       background: var(--red); color: #fff; border: none;
-      padding: 6px 11px; border-radius: 7px;
-      font-size: 11px; font-weight: 600; cursor: pointer;
+      padding: 6px 12px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; cursor: pointer;
       transition: all .15s;
     }
-    .btn-danger:hover { opacity: 0.85; }
+    .btn-danger:hover { opacity: 0.85; transform: translateY(-1px); }
     .btn-warn {
       background: var(--gold); color: #fff; border: none;
-      padding: 6px 11px; border-radius: 7px;
-      font-size: 11px; font-weight: 600; cursor: pointer;
+      padding: 6px 12px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; cursor: pointer;
       transition: all .15s;
     }
-    .btn-warn:hover { opacity: 0.85; }
+    .btn-warn:hover { opacity: 0.85; transform: translateY(-1px); }
 
     .u-table { width: 100%; border-collapse: collapse; }
     .u-table th {
-      text-align: left; padding: 13px 18px;
+      text-align: left; padding: 12px 20px;
       font-size: 10.5px; font-weight: 700;
       color: var(--text3); text-transform: uppercase;
-      letter-spacing: 0.06em; background: var(--card-soft);
+      letter-spacing: 0.07em; background: var(--card-soft);
       border-bottom: 1px solid var(--border);
     }
     .u-table td {
-      padding: 14px 18px; font-size: 13px;
+      padding: 14px 20px; font-size: 13px;
       border-bottom: 1px solid var(--border);
+      transition: background .12s;
     }
     .u-table tr:last-child td { border-bottom: none; }
-    .u-table tr:hover { background: var(--card-soft); }
+    .u-table tbody tr:hover td { background: var(--card-soft); }
+    .u-table tbody tr:nth-child(even) td { background: rgba(0,0,0,0.012); }
+    [data-theme="dark"] .u-table tbody tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
     .u-table .u-actions { display: flex; gap: 6px; justify-content: flex-end; }
 
     .role-badge {
-      display: inline-block; padding: 3px 9px;
-      border-radius: 12px; font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.05em;
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 12px;
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.07em;
     }
     .role-admin { background: #fee2e2; color: #b91c1c; }
     .role-validateur { background: #dbeafe; color: #1e40af; }
     .role-reception { background: #d1fae5; color: #065f46; }
     .role-protocol_agent { background: #e0e7ff; color: #3730a3; }
     .role-none { background: #f3f4f6; color: #6b7280; }
-    [data-theme="dark"] .role-admin { background: #450a0a; color: #fca5a5; }
-    [data-theme="dark"] .role-validateur { background: #1e3a8a; color: #93c5fd; }
-    [data-theme="dark"] .role-reception { background: #064e3b; color: #6ee7b7; }
-    [data-theme="dark"] .role-protocol_agent { background: #312e81; color: #a5b4fc; }
-    [data-theme="dark"] .role-none { background: #374151; color: #9ca3af; }
+    [data-theme="dark"] .role-admin { background: rgba(185,28,28,0.2); color: #fca5a5; border: 1px solid rgba(220,38,38,0.2); }
+    [data-theme="dark"] .role-validateur { background: rgba(30,64,175,0.25); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); }
+    [data-theme="dark"] .role-reception { background: rgba(6,78,59,0.25); color: #6ee7b7; border: 1px solid rgba(22,163,74,0.2); }
+    [data-theme="dark"] .role-protocol_agent { background: rgba(55,48,163,0.25); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.2); }
+    [data-theme="dark"] .role-none { background: rgba(55,65,81,0.4); color: #9ca3af; border: 1px solid rgba(107,114,128,0.2); }
 
     /* Modal */
     .modal-bg {
       position: fixed; inset: 0;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(6px);
+      background: rgba(3, 7, 18, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: none; align-items: center; justify-content: center;
       z-index: 200; padding: 20px;
     }
     .modal-bg.show { display: flex; }
     .modal {
       background: var(--card); color: var(--text);
-      border-radius: 16px; padding: 26px;
-      width: 100%; max-width: 460px;
-      box-shadow: 0 30px 60px -12px rgba(0,0,0,0.4);
-      border: 1px solid var(--border);
+      border-radius: 18px; padding: 28px;
+      width: 100%; max-width: 468px;
+      box-shadow: 0 40px 80px -16px rgba(0,0,0,0.5), 0 0 0 1px var(--border);
     }
     .modal h3 {
       font-family: 'Manrope', sans-serif;
-      font-size: 18px; font-weight: 700;
-      margin-bottom: 6px;
+      font-size: 19px; font-weight: 800;
+      margin-bottom: 6px; letter-spacing: -0.02em;
     }
-    .modal p.sub { font-size: 13px; color: var(--text2); margin-bottom: 18px; }
+    .modal p.sub { font-size: 13.5px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
     .modal .input-group { margin-bottom: 14px; }
     .modal .input-wrap input, .modal select {
       width: 100%; padding: 11px 12px;
-      border: 1.5px solid var(--border); border-radius: 9px;
+      border: 1.5px solid var(--border); border-radius: 10px;
       font-size: 13px; font-family: inherit;
       background: var(--card); color: var(--text);
+      transition: border-color .15s, box-shadow .15s;
     }
-    .modal select { height: 40px; }
+    .modal .input-wrap input:focus, .modal select:focus {
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(23,78,156,.1);
+    }
+    .modal select { height: 42px; }
     .modal .input-wrap input { padding-left: 40px; }
     .modal-err {
       background: var(--red-bg); border: 1px solid var(--red-b);
-      color: var(--red); padding: 10px 13px;
-      border-radius: 8px; font-size: 12px;
-      margin-bottom: 12px; display: none;
+      color: var(--red); padding: 10px 14px;
+      border-radius: 9px; font-size: 12.5px;
+      margin-bottom: 14px; display: none; font-weight: 500;
     }
     .modal-err.show { display: block; }
-    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 22px; }
     .modal .gen-pw {
       background: var(--gold-soft); border: 1px solid rgba(245,158,11,0.3);
-      color: #92400e; padding: 9px 11px;
-      border-radius: 7px; font-size: 11px;
-      margin-top: 6px; display: flex; justify-content: space-between; align-items: center;
+      color: #92400e; padding: 10px 12px;
+      border-radius: 8px; font-size: 11px;
+      margin-top: 7px; display: flex; justify-content: space-between; align-items: center;
+      gap: 8px;
     }
     [data-theme="dark"] .modal .gen-pw { color: #fcd34d; }
-    .modal .gen-pw code { font-family: ui-monospace, 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; }
+    .modal .gen-pw code {
+      font-family: ui-monospace, 'JetBrains Mono', monospace;
+      font-size: 12px; font-weight: 700;
+    }
     .modal .gen-pw button {
       background: transparent; border: none; cursor: pointer;
       color: inherit; text-decoration: underline; font-size: 11px;
-      font-family: inherit; font-weight: 600;
+      font-family: inherit; font-weight: 700; white-space: nowrap;
     }
 
     /* Audit */
     .audit-tbl { width: 100%; border-collapse: collapse; }
     .audit-tbl th, .audit-tbl td {
-      padding: 11px 16px; font-size: 12.5px;
+      padding: 12px 18px; font-size: 12.5px;
       text-align: left; border-bottom: 1px solid var(--border);
     }
     .audit-tbl th {
       font-weight: 700; color: var(--text3);
       text-transform: uppercase; font-size: 10.5px;
-      letter-spacing: 0.05em; background: var(--card-soft);
+      letter-spacing: 0.07em; background: var(--card-soft);
     }
     .audit-tbl tr:last-child td { border-bottom: none; }
+    .audit-tbl tbody tr:hover td { background: var(--card-soft); }
     .action-badge {
-      display: inline-block; padding: 3px 9px;
-      border-radius: 12px; font-size: 10px; font-weight: 700;
-      letter-spacing: 0.04em;
+      display: inline-flex; align-items: center;
+      padding: 3px 9px; border-radius: 12px;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.05em; white-space: nowrap;
     }
     .act-login { background: #dbeafe; color: #1e40af; }
     .act-logout { background: #f3f4f6; color: #6b7280; }
@@ -640,75 +820,129 @@
     .act-password_reset { background: #fef3c7; color: #92400e; }
     .act-password_self_change { background: #fce7f3; color: #9d174d; }
     .act-app_opened { background: #e0e7ff; color: #3730a3; }
-    [data-theme="dark"] .act-login { background: #1e3a8a; color: #93c5fd; }
-    [data-theme="dark"] .act-logout { background: #374151; color: #9ca3af; }
-    [data-theme="dark"] .act-login_failed, [data-theme="dark"] .act-user_deleted { background: #450a0a; color: #fca5a5; }
-    [data-theme="dark"] .act-user_created { background: #064e3b; color: #6ee7b7; }
-    [data-theme="dark"] .act-password_reset { background: #422006; color: #fcd34d; }
-    [data-theme="dark"] .act-password_self_change { background: #500724; color: #fbcfe8; }
-    [data-theme="dark"] .act-app_opened { background: #312e81; color: #a5b4fc; }
+    [data-theme="dark"] .act-login { background: rgba(30,64,175,0.25); color: #93c5fd; }
+    [data-theme="dark"] .act-logout { background: rgba(55,65,81,0.4); color: #9ca3af; }
+    [data-theme="dark"] .act-login_failed, [data-theme="dark"] .act-user_deleted { background: rgba(185,28,28,0.2); color: #fca5a5; }
+    [data-theme="dark"] .act-user_created { background: rgba(6,78,59,0.25); color: #6ee7b7; }
+    [data-theme="dark"] .act-password_reset { background: rgba(120,53,15,0.3); color: #fcd34d; }
+    [data-theme="dark"] .act-password_self_change { background: rgba(80,7,36,0.3); color: #fbcfe8; }
+    [data-theme="dark"] .act-app_opened { background: rgba(55,48,163,0.25); color: #a5b4fc; }
     .time-rel { color: var(--text3); font-size: 11px; }
 
-    /* Footer */
-    .ftr {
-      max-width: 1280px; margin: 0 auto;
-      padding: 40px 28px 24px;
-      text-align: center; color: var(--text3); font-size: 11.5px;
-      border-top: 1px solid var(--border);
-      margin-top: 40px;
+    /* ════════════════════════════════
+       FOOTER
+    ════════════════════════════════ */
+    .ftr-wrap {
+      max-width: 1320px; margin: 0 auto;
+      padding: 0 28px 28px;
+      margin-top: 56px;
     }
-    .ftr a { color: var(--accent); text-decoration: none; }
+    .ftr {
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+      text-align: center;
+    }
+    .ftr-logo {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; margin-bottom: 16px;
+    }
+    .ftr-flag {
+      display: flex; width: 22px; height: 15px;
+      border-radius: 3px; overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .ftr-flag > span { flex: 1; }
+    .ftr-flag > span:nth-child(1) { background: #0066FF; }
+    .ftr-flag > span:nth-child(2) { background: #FFD700; }
+    .ftr-flag > span:nth-child(3) { background: #FF0000; }
+    .ftr-name {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px; font-weight: 800;
+      color: var(--text2);
+    }
+    .ftr p {
+      color: var(--text3); font-size: 12px;
+      line-height: 1.8;
+    }
+    .ftr a { color: var(--accent); text-decoration: none; font-weight: 600; }
     [data-theme="dark"] .ftr a { color: #93c5fd; }
     .ftr a:hover { text-decoration: underline; }
-    .ftr p:first-child { font-weight: 600; color: var(--text2); }
+    .ftr-credits {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 11.5px; color: var(--text3);
+    }
+    .ftr-credits strong { color: var(--text2); font-weight: 700; }
 
+    /* Spinner */
     .spin {
       display: inline-block; width: 14px; height: 14px;
       border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
-      border-radius: 50%; animation: spin .8s linear infinite;
+      border-radius: 50%; animation: spin .7s linear infinite;
       vertical-align: middle;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .empty-state {
-      padding: 50px 20px; text-align: center;
-      color: var(--text3); font-size: 13px;
+      padding: 52px 20px; text-align: center;
+      color: var(--text3); font-size: 13px; line-height: 1.7;
     }
 
+    /* ════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════ */
     @media (max-width: 768px) {
-      .hdr-inner { padding: 12px 16px; flex-wrap: wrap; }
+      .hdr-inner { padding: 11px 16px; flex-wrap: wrap; }
       .hdr-txt h1 { font-size: 14px; }
-      .hdr-txt p { font-size: 10px; }
-      .hdr-logo, .hdr-logo img { height: 38px; }
-      .main { padding: 24px 16px 32px; }
-      .sec-head h2 { font-size: 22px; }
+      .hdr-txt p { display: none; }
+      .hdr-logo, .hdr-logo img { height: 36px; }
+      .hdr-divider { display: none; }
+      .main { padding: 24px 16px 36px; }
+      .sec-head h2 { font-size: 24px; }
       .search { min-width: 0; width: 100%; }
       .toolbar { flex-direction: column; align-items: stretch; }
-      .user-chip span.name, .icon-btn span:not(.no-hide) { display: none; }
-      .login-card { padding: 28px 22px; }
+      .user-chip span.name { display: none; }
+      .icon-btn span:not(.no-hide) { display: none; }
+      .login-card { padding: 32px 22px 28px; }
       .u-table th:nth-child(2), .u-table td:nth-child(2) { display: none; }
       .audit-tbl th:nth-child(4), .audit-tbl td:nth-child(4) { display: none; }
       .audit-tbl th:nth-child(5), .audit-tbl td:nth-child(5) { display: none; }
+      .apps-grid { grid-template-columns: 1fr; }
+      .tabs { width: 100%; }
+    }
+    @media (max-width: 480px) {
+      .sec-badge { font-size: 10px; }
+      .login-card { padding: 28px 18px 22px; border-radius: 18px; }
+      .login-title { font-size: 22px; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
     }
   </style>
 </head>
 <body class="hide-app hide-login">
 
-  <!-- LOGIN -->
+  <!-- ════════ LOGIN ════════ -->
   <div class="login-screen" id="loginScreen">
     <div class="login-card">
       <div class="login-flag"><div></div><div></div><div></div></div>
       <div class="login-logo"><img src="/logo-fsrdc-officiel.jpg" alt="FSRDC"></div>
       <h1 class="login-title">Portail FSRDC</h1>
-      <p class="login-subtitle">Connectez-vous pour accéder aux applications</p>
+      <p class="login-subtitle">Connectez-vous pour accéder aux applications du Fonds Social RDC</p>
       <div class="login-error" id="loginError"></div>
       <form id="loginForm" autocomplete="on">
         <div class="input-group">
           <label for="email">Adresse email</label>
           <div class="input-wrap">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-              <polyline points="22,6 12,13 2,6"/>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <polyline points="2,6 12,13 22,6"/>
             </svg>
             <input type="email" id="email" name="email" required placeholder="nom@fondsocial.cd" autocomplete="username">
           </div>
@@ -716,8 +950,8 @@
         <div class="input-group">
           <label for="password">Mot de passe</label>
           <div class="input-wrap">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
             <input type="password" id="password" name="password" required placeholder="••••••••" autocomplete="current-password">
@@ -726,40 +960,50 @@
         <button type="submit" class="btn-login" id="loginBtn"><span id="loginBtnTxt">Se connecter</span></button>
       </form>
       <div class="login-foot">
-        <strong>Fonds Social RDC</strong> · Direction du Numérique<br>
-        Accès réservé aux agents autorisés
+        <div class="login-foot-logo">
+          <div class="login-foot-flag"><span></span><span></span><span></span></div>
+          <span style="font-size:12px;font-weight:700;color:#475569;">Fonds Social de la RDC</span>
+        </div>
+        <p><strong>Direction du Numérique</strong> · Cellule Informatique</p>
+        <p>Accès réservé aux agents autorisés</p>
       </div>
     </div>
   </div>
 
-  <!-- APP -->
+  <!-- ════════ APP ════════ -->
   <div class="app">
     <header class="hdr">
       <div class="hdr-inner">
         <div class="hdr-left">
           <div class="hdr-logo"><img src="/logo-fsrdc-officiel.jpg" alt="FSRDC"/></div>
+          <div class="hdr-divider"></div>
           <div class="hdr-txt">
-            <h1>Portail Applications FSRDC</h1>
-            <p>Direction du Numérique · RDC</p>
+            <h1>Portail Applications</h1>
+            <p>Direction du Numérique · FSRDC</p>
           </div>
         </div>
         <div class="hdr-right">
           <button class="user-chip" id="userChip" onclick="openAccount()" title="Mon compte">
             <span class="avatar" id="userAvatar">?</span>
             <span class="name" id="userName">...</span>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity:.5"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <span class="status-pill"><span class="dot"></span>EN LIGNE</span>
           <button class="icon-btn gold" id="adminBtn" onclick="toggleAdmin()" style="display:none">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"/>
+            </svg>
             <span>Admin</span>
           </button>
           <button class="icon-btn" onclick="toggleTheme()" title="Changer de thème">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
             <span id="themeLabel">Sombre</span>
           </button>
           <button class="icon-btn danger" onclick="logout()" title="Déconnexion">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
               <polyline points="16 17 21 12 16 7"/>
               <line x1="21" y1="12" x2="9" y2="12"/>
@@ -776,8 +1020,9 @@
       <div id="appsView">
         <div class="toolbar">
           <div class="sec-head">
+            <div class="sec-badge">Applications disponibles</div>
             <h2 class="display">Espace de travail</h2>
-            <p>Toutes les applications du Fonds Social de la République Démocratique du Congo, dans une seule interface.</p>
+            <p>Toutes les applications du Fonds Social de la République Démocratique du Congo, réunies en une seule interface.</p>
           </div>
           <div class="search">
             <svg class="search-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -785,7 +1030,12 @@
           </div>
         </div>
         <div class="apps-grid" id="appsGrid"></div>
-        <div class="nope" id="nope" style="display:none">Aucune application ne correspond à votre recherche.</div>
+        <div class="nope" id="nope" style="display:none">
+          <div class="nope-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.4;margin:0 auto;display:block"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+          Aucune application ne correspond à votre recherche.
+        </div>
       </div>
 
       <!-- Admin Panel -->
@@ -796,17 +1046,18 @@
             <span>Retour à l'accueil</span>
           </button>
           <div class="sec-head">
+            <div class="sec-badge">Panneau d'administration</div>
             <h2 class="display">Administration</h2>
             <p>Gérez les utilisateurs et consultez le journal d'activité du portail.</p>
           </div>
         </div>
         <div class="tabs">
           <button class="tab on" onclick="showTab('users')" id="tab-users">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             Utilisateurs
           </button>
           <button class="tab" onclick="showTab('audit')" id="tab-audit">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             Journal d'audit
           </button>
         </div>
@@ -839,11 +1090,18 @@
       </div>
     </main>
 
-    <footer class="ftr">
-      <p>Fonds Social de la République Démocratique du Congo - <a href="https://fondsocial.cd" target="_blank">fondsocial.cd</a></p>
-      <p style="margin-top:4px;">Direction du Numérique - Cellule Informatique · &copy; 2025-<span id="yr"></span></p>
-      <p style="margin-top:8px;font-size:12px;opacity:.75">Conçu et développé par <strong>Armel Manzambi</strong> · Chargé du Numérique, FSRDC</p>
-    </footer>
+    <div class="ftr-wrap">
+      <footer class="ftr">
+        <div class="ftr-logo">
+          <div class="ftr-flag"><span></span><span></span><span></span></div>
+          <span class="ftr-name">Fonds Social de la République Démocratique du Congo</span>
+        </div>
+        <p><a href="https://fondsocial.cd" target="_blank">fondsocial.cd</a> · Direction du Numérique · Cellule Informatique · &copy; 2025–<span id="yr"></span></p>
+        <div class="ftr-credits">
+          Conçu et développé par <strong>Armel Manzambi</strong> · Chargé du Numérique, FSRDC
+        </div>
+      </footer>
+    </div>
   </div>
 
   <!-- MODAL: Create user -->
@@ -855,21 +1113,21 @@
       <div class="input-group">
         <label>Nom complet</label>
         <div class="input-wrap">
-          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <input type="text" id="newUserName" placeholder="Jean Dupont">
         </div>
       </div>
       <div class="input-group">
         <label>Email</label>
         <div class="input-wrap">
-          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,6 12,13 22,6"/></svg>
           <input type="email" id="newUserEmail" placeholder="nom@fondsocial.cd">
         </div>
       </div>
       <div class="input-group">
         <label>Mot de passe initial (min. 8 caractères)</label>
         <div class="input-wrap">
-          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           <input type="text" id="newUserPw" placeholder="Mot de passe initial">
         </div>
         <div class="gen-pw">
@@ -903,7 +1161,7 @@
       <div class="input-group">
         <label>Nouveau mot de passe (min. 8 caractères)</label>
         <div class="input-wrap">
-          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           <input type="text" id="resetPwInput" placeholder="Nouveau mot de passe">
         </div>
         <div class="gen-pw">
@@ -933,48 +1191,46 @@
 
   <!-- MODAL: Mon compte -->
   <div class="modal-bg" id="accountModal">
-    <div class="modal" style="max-width: 480px;">
+    <div class="modal" style="max-width: 488px;">
       <h3>Mon compte</h3>
       <p class="sub" id="accountInfo">-</p>
 
-      <div style="background: var(--card-soft); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 18px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#FFD700,#f59e0b);color:#422006;font-family:'Manrope',sans-serif;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;" id="accountAvatar">?</div>
+      <div style="background: var(--card-soft); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#FFD700,#f59e0b);color:#422006;font-family:'Manrope',sans-serif;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 3px 10px rgba(245,158,11,0.35);flex-shrink:0" id="accountAvatar">?</div>
           <div>
-            <div style="font-size:13px;font-weight:700;color:var(--text)" id="accountName">-</div>
-            <div style="font-size:11.5px;color:var(--text3);margin-top:2px" id="accountEmail">-</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text)" id="accountName">-</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:3px" id="accountEmail">-</div>
           </div>
         </div>
       </div>
 
-      <h4 style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:7px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <h4 style="font-family:'Manrope',sans-serif;font-size:13px;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:7px;letter-spacing:-0.01em;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         Changer mon mot de passe
       </h4>
 
       <div class="modal-err" id="accountErr"></div>
-      <div class="modal-success" id="accountSuccess" style="display:none;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;padding:10px 13px;border-radius:8px;font-size:12px;margin-bottom:12px;font-weight:600;">Mot de passe modifié avec succès.</div>
+      <div class="modal-success" id="accountSuccess" style="display:none;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;padding:10px 14px;border-radius:9px;font-size:12.5px;margin-bottom:14px;font-weight:600;">Mot de passe modifié avec succès.</div>
 
       <div class="input-group">
         <label>Mot de passe actuel</label>
         <div class="input-wrap">
-          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           <input type="password" id="currentPw" placeholder="Mot de passe actuel" autocomplete="current-password">
         </div>
       </div>
-
       <div class="input-group">
         <label>Nouveau mot de passe (min. 8 caractères)</label>
         <div class="input-wrap">
-          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           <input type="password" id="newPw" placeholder="Nouveau mot de passe" autocomplete="new-password">
         </div>
       </div>
-
       <div class="input-group">
         <label>Confirmer le nouveau mot de passe</label>
         <div class="input-wrap">
-          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg style="position:absolute;left:12px;top:11px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           <input type="password" id="confirmPw" placeholder="Confirmer le mot de passe" autocomplete="new-password">
         </div>
       </div>
@@ -986,6 +1242,7 @@
     </div>
   </div>
 
+  <!-- ════════ SUPABASE + AUTH LOGIC (UNCHANGED) ════════ -->
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     const SUPABASE_URL = 'https://jdeasbpxkkshfwnurhjd.supabase.co';
@@ -1120,29 +1377,96 @@
     };
   </script>
 
+  <!-- ════════ APP LOGIC (UNCHANGED) ════════ -->
   <script>
     document.getElementById('yr').textContent = new Date().getFullYear();
 
     const APPS = [
-      { name: "Messagerie",                desc: "Email FSRDC",                       icon: "📧", links: [{ label: "Webmail", url: "https://webmail.fondsocial.cd/", primary: true }] },
-      { name: "Gestion des Visites",       desc: "RDV & accueil visiteurs",           icon: "🏢", links: [
-        { label: "Fiche de visite", url: "https://visites.fondsocialrdc.org", primary: true },
-        { label: "Mode kiosque", url: "https://visites.fondsocialrdc.org/?mode=kiosk" },
-        { label: "Administration", url: "https://visites.fondsocialrdc.org/admin" },
-      ]},
-      { name: "Suivi des Marchés (PPM)",   desc: "PADCV-PTA & PAGDC-PTA",             icon: "📊", links: [{ label: "PPM Dashboard", url: "https://ppm.fondsocialrdc.org", primary: true }] },
-      { name: "Gestion des Congés",        desc: "Demandes RH & validation",          icon: "📅", links: [{ label: "Tableau de bord", url: "https://conges.fondsocialrdc.org/dashboard", primary: true }] },
-      { name: "Missions Flow",             desc: "Ordres de mission & rapports",      icon: "🛫", links: [{ label: "Tableau de bord", url: "https://missions.fondsocialrdc.org", primary: true }] },
-      { name: "Photos-Mission",            desc: "Banque institutionnelle d'images des missions et activités", icon: "📷", links: [
-        { label: "Photothèque", url: "https://photos.fondsocialrdc.org", primary: true },
-      ]},
-      { name: "Signature Email",           desc: "Générateur de signature officielle", icon: "✉️", links: [{ label: "Générateur", url: "/signature/", primary: true }] },
-      { name: "DIA PADCV-PTA",             desc: "Plateforme agricole",               icon: "🌾", links: [{ label: "Plateforme DIA", url: "http://diapadcv-pta.online", primary: true, ext: true }] },
-      { name: "Administration Système",    desc: "Outils techniques",                 icon: "⚙️", links: [
-        { label: "Supabase", url: "https://supabase.com/dashboard", ext: true },
-        { label: "Cloudflare", url: "https://dash.cloudflare.com/?to=/:account/workers", ext: true },
-      ]},
+      {
+        name: "Messagerie",
+        desc: "Email FSRDC",
+        color: "linear-gradient(135deg, #0066FF, #2563eb)",
+        accentColor: "#0066FF",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,6 12,13 22,6"/></svg>`,
+        links: [{ label: "Webmail", url: "https://webmail.fondsocial.cd/", primary: true }]
+      },
+      {
+        name: "Gestion des Visites",
+        desc: "RDV & accueil visiteurs",
+        color: "linear-gradient(135deg, #7c3aed, #9333ea)",
+        accentColor: "#7c3aed",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+        links: [
+          { label: "Fiche de visite", url: "https://visites.fondsocialrdc.org", primary: true },
+          { label: "Mode kiosque", url: "https://visites.fondsocialrdc.org/?mode=kiosk" },
+          { label: "Administration", url: "https://visites.fondsocialrdc.org/admin" },
+        ]
+      },
+      {
+        name: "Suivi des Marchés (PPM)",
+        desc: "PADCV-PTA & PAGDC-PTA",
+        color: "linear-gradient(135deg, #059669, #10b981)",
+        accentColor: "#059669",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/><path d="M7 15h2M7 19h2M12 15h5M12 19h5"/></svg>`,
+        links: [{ label: "PPM Dashboard", url: "https://ppm.fondsocialrdc.org", primary: true }]
+      },
+      {
+        name: "Gestion des Congés",
+        desc: "Demandes RH & validation",
+        color: "linear-gradient(135deg, #d97706, #f59e0b)",
+        accentColor: "#d97706",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>`,
+        links: [{ label: "Tableau de bord", url: "https://conges.fondsocialrdc.org/dashboard", primary: true }]
+      },
+      {
+        name: "Missions Flow",
+        desc: "Ordres de mission & rapports",
+        color: "linear-gradient(135deg, #0891b2, #06b6d4)",
+        accentColor: "#0891b2",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>`,
+        links: [{ label: "Tableau de bord", url: "https://missions.fondsocialrdc.org", primary: true }]
+      },
+      {
+        name: "Photos-Mission",
+        desc: "Banque institutionnelle d'images des missions et activités",
+        color: "linear-gradient(135deg, #be185d, #ec4899)",
+        accentColor: "#be185d",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`,
+        links: [
+          { label: "Photothèque", url: "https://photos.fondsocialrdc.org", primary: true },
+        ]
+      },
+      {
+        name: "Signature Email",
+        desc: "Générateur de signature officielle",
+        color: "linear-gradient(135deg, #4f46e5, #6366f1)",
+        accentColor: "#4f46e5",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,
+        links: [{ label: "Générateur", url: "/signature/", primary: true }]
+      },
+      {
+        name: "DIA PADCV-PTA",
+        desc: "Plateforme agricole",
+        color: "linear-gradient(135deg, #15803d, #22c55e)",
+        accentColor: "#15803d",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M5 3a7 7 0 0 0 7 9 7 7 0 0 0 7-9"/><path d="M5 3h14"/></svg>`,
+        links: [{ label: "Plateforme DIA", url: "http://diapadcv-pta.online", primary: true, ext: true }]
+      },
+      {
+        name: "Administration Système",
+        desc: "Outils techniques",
+        color: "linear-gradient(135deg, #64748b, #94a3b8)",
+        accentColor: "#64748b",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`,
+        links: [
+          { label: "Supabase", url: "https://supabase.com/dashboard", ext: true },
+          { label: "Cloudflare", url: "https://dash.cloudflare.com/?to=/:account/workers", ext: true },
+        ]
+      },
     ];
+
+    // External link SVG
+    const extIconSVG = `<svg class="lnk-ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
 
     function render(q = '') {
       const grid = document.getElementById('appsGrid');
@@ -1153,16 +1477,19 @@
         n++;
         return `
           <div class="app-card">
-            <div class="app-head">
-              <div class="app-icon">${app.icon}</div>
-              <div>
-                <div class="app-name">${app.name}</div>
-                <div class="app-desc">${app.desc}</div>
+            <div class="app-card-accent" style="background:${app.color}"></div>
+            <div class="app-card-body">
+              <div class="app-head">
+                <div class="app-icon" style="background:${app.color}">${app.icon}</div>
+                <div class="app-meta">
+                  <div class="app-name">${app.name}</div>
+                  <div class="app-desc">${app.desc}</div>
+                </div>
               </div>
             </div>
             <div class="app-links">
               ${app.links.map(l =>
-                `<a href="${l.url}" ${l.url.startsWith('/') ? '' : 'target="_blank"'} rel="noopener" onclick="onAppClick('${app.name}','${l.label}')" class="lnk${l.primary ? ' pri' : ''}${l.disabled ? ' dis' : ''}${l.ext ? ' ext' : ''}">${l.label}${l.disabled ? ' (bientôt)' : ''}</a>`
+                `<a href="${l.url}" ${l.url.startsWith('/') ? '' : 'target="_blank"'} rel="noopener" onclick="onAppClick('${app.name}','${l.label}')" class="lnk${l.primary ? ' pri' : ''}${l.disabled ? ' dis' : ''}">${l.label}${l.ext ? extIconSVG : ''}${l.disabled ? ' (bientôt)' : ''}</a>`
               ).join('')}
             </div>
           </div>`;
