@@ -34,7 +34,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
 .f input.lk{background:#F5F7FA;color:#94A3B8;border-color:#E5E9EF;cursor:default}
 .f textarea{width:100%;min-height:52px;padding:10px 12px;font-size:12.5px;border:1px solid #CBD5E1;border-radius:8px;background:#fff;color:#0F172A;font-family:inherit;resize:vertical;line-height:1.5}
 .f textarea:focus{outline:none;border-color:#1A4B8A;box-shadow:0 0 0 3px rgba(26,75,138,.1)}
+.f textarea.lk{background:#F5F7FA;color:#94A3B8;border-color:#E5E9EF;cursor:default;resize:none}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.chk-row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#475569;padding:2px 2px 4px}
+.chk-row input{width:15px;height:15px;accent-color:#1A4B8A;cursor:pointer}
+.chk-row label{cursor:pointer;user-select:none}
 
 .logo-row{display:flex;align-items:center;gap:12px}
 .logo-prev{width:52px;height:52px;border-radius:10px;border:1px solid #E5E9EF;background:#F5F7FA;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
@@ -113,11 +118,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
 
       <div class="sec">
         <div class="sec-lbl">Identité</div>
+        <div class="f"><label>Prénom</label><input id="f-prenom" oninput="go()" placeholder="Armel"></div>
         <div class="r2">
           <div class="f"><label>Nom</label><input id="f-nom" oninput="go()" placeholder="Manzambi"></div>
           <div class="f"><label>Post-nom</label><input id="f-postnom" oninput="go()" placeholder="Kiese"></div>
         </div>
-        <div class="f"><label>Prénom</label><input id="f-prenom" oninput="go()" placeholder="Armel"></div>
         <div class="f"><label>Titre / Poste</label><input id="f-titre" oninput="go()" placeholder="Chargé du Numérique"></div>
       </div>
 
@@ -126,13 +131,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
         <div class="f"><label>Téléphone 1</label><input id="f-tel1" oninput="go()" placeholder="+243 993 124 671"></div>
         <div class="f"><label>Téléphone 2 <span class="opt-chip">optionnel</span></label><input id="f-tel2" oninput="go()" placeholder="+243 ..."></div>
         <div class="f"><label>Adresse e-mail</label><input id="f-email" oninput="go()" placeholder="armel.manzambi@fondsocial.cd"></div>
-        <div class="f"><label>Adresse</label><textarea id="f-adresse" oninput="go()" placeholder="145, Colonel Mondjiba, Commune de Ngaliema, Kinshasa - RDC"></textarea></div>
       </div>
 
       <div class="sec">
-        <div class="sec-lbl">Organisation</div>
-        <div class="f"><label>Structure</label><input id="f-org" value="Fonds Social de la RDC (FSRDC)" oninput="go()"></div>
-        <div class="f"><label>Site web</label><input id="f-site" value="www.fondsocial.cd" oninput="go()"></div>
+        <div class="sec-lbl">Verrouillés</div>
+        <div class="f"><label>Structure <span class="lock-chip">fixe</span></label><input class="lk" id="f-org" value="Fonds Social de la RDC (FSRDC)" readonly></div>
+        <div class="f"><label>Site web <span class="lock-chip">fixe</span></label><input class="lk" id="f-site" value="www.fondsocial.cd" readonly></div>
+        <div class="f"><label>Adresse <span class="lock-chip">fixe</span></label><textarea class="lk" id="f-adresse" readonly>145, Colonel Mondjiba, Chanic Eléphant, Commune de NGALIEMA, KINSHASA – RDC</textarea></div>
       </div>
 
       <div class="sec">
@@ -170,6 +175,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
       </div>
     </div>
     <div class="actions">
+      <div class="chk-row">
+        <input type="checkbox" id="f-transparent">
+        <label for="f-transparent">Fond transparent (PNG)</label>
+      </div>
       <button class="btn btn-p" id="btn-png" onclick="downloadPNG()" disabled>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Télécharger le QR code (PNG)
@@ -232,7 +241,7 @@ function buildVCard(){
   const titre = val('f-titre'), tel1 = val('f-tel1'), tel2 = val('f-tel2');
   const email = val('f-email'), adresse = val('f-adresse');
   const org = val('f-org'), site = val('f-site');
-  const fullName = [nom, postnom, prenom].filter(Boolean).join(' ') || 'Contact FSRDC';
+  const fullName = [prenom, nom, postnom].filter(Boolean).join(' ') || 'Contact FSRDC';
 
   const lines = ['BEGIN:VCARD','VERSION:3.0'];
   lines.push(`N:${escVCard(nom)};${escVCard(prenom)};${escVCard(postnom)};;`);
@@ -283,7 +292,7 @@ function updateCardMock(){
   const nom = val('f-nom'), postnom = val('f-postnom'), prenom = val('f-prenom');
   const titre = val('f-titre'), tel1 = val('f-tel1'), tel2 = val('f-tel2');
   const email = val('f-email'), adresse = val('f-adresse');
-  const fullName = [nom, postnom, prenom].filter(Boolean).join(' ');
+  const fullName = [prenom, nom, postnom].filter(Boolean).join(' ');
   const body = document.getElementById('cm-body');
 
   if(!fullName){
@@ -333,20 +342,27 @@ function render(){
     return;
   }
 
-  QRCode.toCanvas(canvas, text, {
-    errorCorrectionLevel: 'H',
-    margin: 2,
-    width: 440,
-    color: { dark: '#000000', light: '#FFFFFFFF' }
-  }, function(err){
+  renderQRToCanvas(canvas, text, false, function(err){
     if(err){ console.error(err); return; }
-    drawLogoOnCanvas(canvas);
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     box.style.display = 'flex';
     empty.style.display = 'none';
     btnPng.disabled = false;
     btnVcf.disabled = false;
+  });
+}
+
+function renderQRToCanvas(canvas, text, transparent, cb){
+  QRCode.toCanvas(canvas, text, {
+    errorCorrectionLevel: 'H',
+    margin: 2,
+    width: 440,
+    color: { dark: '#000000FF', light: transparent ? '#FFFFFF00' : '#FFFFFFFF' }
+  }, function(err){
+    if(err) return cb(err);
+    drawLogoOnCanvas(canvas);
+    cb(null);
   });
 }
 
@@ -359,16 +375,32 @@ function toast(msg){
 }
 
 function downloadPNG(){
-  const canvas = document.getElementById('qr-canvas');
-  canvas.toBlob(function(blob){
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = currentSlug + '-qr-contact.png';
-    a.click();
-    URL.revokeObjectURL(url);
-    toast('QR code téléchargé !');
-  }, 'image/png');
+  const transparent = document.getElementById('f-transparent').checked;
+
+  function finish(canvas){
+    canvas.toBlob(function(blob){
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = currentSlug + '-qr-contact.png';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('QR code téléchargé !');
+    }, 'image/png');
+  }
+
+  if(!transparent){
+    finish(document.getElementById('qr-canvas'));
+    return;
+  }
+
+  const offscreen = document.createElement('canvas');
+  offscreen.width = 440;
+  offscreen.height = 440;
+  renderQRToCanvas(offscreen, currentVCard, true, function(err){
+    if(err){ console.error(err); return; }
+    finish(offscreen);
+  });
 }
 
 function downloadVCF(){
