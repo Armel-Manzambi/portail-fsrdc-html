@@ -23,6 +23,7 @@ Le portail est un **tableau de bord** qui présente toutes les applications FSRD
 | **Missions Flow** | Ordres de mission & rapports | missions.fondsocialrdc.org |
 | **Photos-Mission** | Banque institutionnelle d'images | photos.fondsocialrdc.org |
 | **Signature Email** | Générateur de signature officielle | portail.fondsocialrdc.org/signature/ |
+| **QR Code Carte de Visite** | Générateur de QR code contact (vCard) avec logo | portail.fondsocialrdc.org/qrcode/ |
 | **DIA PADCV-PTA** | Plateforme agricole | diapadcv-pta.online |
 | **Administration Système** | Supabase, Cloudflare | (liens externes) |
 
@@ -36,7 +37,7 @@ Le portail est un **tableau de bord** qui présente toutes les applications FSRD
 | **Hébergement** | Cloudflare Workers (assets statiques) |
 | **Domaine** | portail.fondsocialrdc.org |
 | **Authentification** | Supabase Auth (session partagée avec les autres apps) |
-| **Sous-app intégrée** | Générateur de signature email (`/signature/`) |
+| **Sous-apps intégrées** | Générateur de signature email (`/signature/`), Générateur de QR code carte de visite (`/qrcode/`) |
 
 ---
 
@@ -47,6 +48,8 @@ portail-fsrdc-html/
 ├── index.html                       # Portail principal (cartes + auth + audit log)
 ├── signature/
 │   └── index.html                   # Générateur de signature email
+├── qrcode/
+│   └── index.html                   # Générateur de QR code carte de visite (vCard + logo)
 ├── logo-fsrdc.jpg                   # Logo FSRDC (JPG)
 ├── logo-fsrdc.png                   # Logo FSRDC (PNG)
 ├── logo-fsrdc-officiel.jpg          # Variante officielle du logo

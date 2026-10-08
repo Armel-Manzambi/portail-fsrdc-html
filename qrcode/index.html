@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Générateur de QR code contact · FSRDC</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:#EDF0F4;color:#0F172A;line-height:1.5}
+.app{display:grid;grid-template-columns:360px 1fr;min-height:100vh}
+
+.sidebar{background:#fff;border-right:1px solid #E5E9EF;display:flex;flex-direction:column;overflow:hidden}
+.sb-head{background:linear-gradient(135deg,#0A1F3D 0%,#1A4B8A 100%);padding:26px 24px 22px;flex-shrink:0;color:#fff;position:relative;overflow:hidden}
+.sb-head::after{content:'';position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04)}
+.sb-head .eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.65;margin-bottom:5px}
+.sb-head .title{font-size:18px;font-weight:600;line-height:1.25;position:relative;z-index:1}
+.sb-head .stripe{display:flex;height:3px;margin-top:16px;border-radius:2px;overflow:hidden}
+.sb-head .stripe div{flex:1;height:100%}
+
+.sb-body{flex:1;overflow-y:auto;padding:22px 22px 30px}
+.sb-body::-webkit-scrollbar{width:6px}
+.sb-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:4px}
+
+.sec{margin-bottom:22px}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94A3B8;margin-bottom:11px;display:flex;align-items:center;gap:6px}
+.lock-chip{font-size:9px;background:#E6F1FB;color:#0C447C;padding:2px 7px;border-radius:20px;font-weight:600;letter-spacing:.03em;text-transform:none}
+.opt-chip{font-size:9px;background:#F5F7FA;color:#94A3B8;padding:2px 7px;border-radius:20px;font-weight:600;letter-spacing:.03em;text-transform:none}
+
+.f{margin-bottom:10px}
+.f label{display:block;font-size:11.5px;color:#64748B;margin-bottom:5px;font-weight:500}
+.f input{width:100%;height:38px;padding:0 12px;font-size:13px;border:1px solid #CBD5E1;border-radius:8px;background:#fff;color:#0F172A;transition:all .15s;font-family:inherit}
+.f input:focus{outline:none;border-color:#1A4B8A;box-shadow:0 0 0 3px rgba(26,75,138,.1)}
+.f input.lk{background:#F5F7FA;color:#94A3B8;border-color:#E5E9EF;cursor:default}
+.f textarea{width:100%;min-height:52px;padding:10px 12px;font-size:12.5px;border:1px solid #CBD5E1;border-radius:8px;background:#fff;color:#0F172A;font-family:inherit;resize:vertical;line-height:1.5}
+.f textarea:focus{outline:none;border-color:#1A4B8A;box-shadow:0 0 0 3px rgba(26,75,138,.1)}
+.f textarea.lk{background:#F5F7FA;color:#94A3B8;border-color:#E5E9EF;cursor:default;resize:none}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.chk-row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#475569;padding:2px 2px 4px}
+.chk-row input{width:15px;height:15px;accent-color:#1A4B8A;cursor:pointer}
+.chk-row label{cursor:pointer;user-select:none}
+
+.logo-row{display:flex;align-items:center;gap:12px}
+.logo-prev{width:52px;height:52px;border-radius:10px;border:1px solid #E5E9EF;background:#F5F7FA;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.logo-prev img{max-width:100%;max-height:100%;object-fit:contain}
+.logo-actions{display:flex;flex-direction:column;gap:6px}
+.mini-btn{font-size:11.5px;font-weight:600;color:#1A4B8A;background:#EAF1FA;border:none;padding:7px 11px;border-radius:7px;cursor:pointer;text-align:left}
+.mini-btn:hover{background:#DCEAFA}
+.mini-btn.reset{color:#64748B;background:#F5F7FA}
+.mini-btn.reset:hover{background:#EDF0F4}
+
+.main{background:linear-gradient(180deg,#F5F7FA 0%,#EDF0F4 100%);display:flex;flex-direction:column;padding:28px;gap:16px;overflow:auto}
+
+.pv-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.pv-lbl{font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#94A3B8}
+.pv-badge{font-size:11px;color:#64748B;display:flex;align-items:center;gap:6px}
+.pv-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:#22C55E;box-shadow:0 0 0 3px rgba(34,197,94,.15)}
+
+.pv-card{background:#fff;border:1px solid rgba(10,31,61,.08);border-radius:14px;padding:32px 28px;box-shadow:0 1px 3px rgba(10,31,61,.04),0 8px 24px rgba(10,31,61,.06)}
+.qr-stage{display:flex;gap:32px;align-items:center;flex-wrap:wrap;justify-content:center}
+
+.qr-box{position:relative;width:260px;height:260px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:12px}
+.qr-box canvas{width:100%;height:100%;display:block;border-radius:8px}
+.qr-empty{width:260px;height:260px;border:2px dashed #CBD5E1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#94A3B8;text-align:center;padding:20px}
+.qr-empty svg{opacity:.5}
+.qr-empty span{font-size:12.5px;line-height:1.5}
+
+.card-mock{width:300px;border-radius:14px;padding:22px 22px 20px;background:linear-gradient(135deg,#0A1F3D 0%,#123a6b 100%);color:#fff;position:relative;overflow:hidden;flex-shrink:0}
+.card-mock::after{content:'';position:absolute;right:-30px;bottom:-30px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.05)}
+.card-mock .cm-stripe{display:flex;height:3px;margin-bottom:16px;border-radius:2px;overflow:hidden}
+.card-mock .cm-stripe div{flex:1;height:100%}
+.card-mock .cm-name{font-size:17px;font-weight:700;line-height:1.3}
+.card-mock .cm-title{font-size:12.5px;opacity:.75;margin-top:3px;margin-bottom:14px}
+.card-mock .cm-row{font-size:11.5px;opacity:.9;display:flex;gap:8px;margin-bottom:7px;line-height:1.4;position:relative;z-index:1}
+.card-mock .cm-row b{opacity:.55;font-weight:600;flex-shrink:0}
+.card-mock .cm-empty{font-size:12px;opacity:.6;font-style:italic}
+
+.actions{display:flex;flex-direction:column;gap:9px}
+.btn{width:100%;height:48px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:9px;font-family:inherit}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-p{background:linear-gradient(135deg,#1A4B8A 0%,#2E86AB 100%);color:#fff;box-shadow:0 2px 6px rgba(26,75,138,.25)}
+.btn-p:hover:not(:disabled){box-shadow:0 4px 14px rgba(26,75,138,.35);transform:translateY(-1px)}
+.btn-s{background:#fff;color:#64748B;border:1px solid #CBD5E1}
+.btn-s:hover:not(:disabled){background:#F5F7FA;border-color:#94A3B8}
+
+.steps{background:#fff;border:1px solid rgba(10,31,61,.08);border-radius:10px;padding:16px 18px}
+.steps-title{font-size:11px;font-weight:700;color:#0A1F3D;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em}
+.step{display:flex;gap:11px;font-size:12px;color:#475569;line-height:1.6;margin-bottom:9px}
+.step:last-child{margin-bottom:0}
+.step-num{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#1A4B8A;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.step strong{color:#0A1F3D;font-weight:600}
+
+.toast-c{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:100}
+.toast{background:#0A1F3D;color:#fff;padding:12px 24px;border-radius:28px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s,transform .3s;transform:translateY(14px);white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.25);display:flex;align-items:center;gap:9px}
+.toast.on{opacity:1;transform:translateY(0)}
+.toast svg{width:16px;height:16px}
+
+@media (max-width:900px){.app{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a href="/" style="position:fixed;top:14px;right:18px;z-index:100;background:#0a3878;color:#fff;text-decoration:none;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(10,56,120,.25);display:inline-flex;align-items:center;gap:7px">← Retour au portail</a>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sb-head">
+      <div class="eyebrow">FSRDC · Portail interne</div>
+      <div class="title">QR code carte<br>de visite</div>
+      <div class="stripe">
+        <div style="background:#2E86AB"></div>
+        <div style="background:#F4C542"></div>
+        <div style="background:#C8001A"></div>
+      </div>
+    </div>
+    <div class="sb-body">
+
+      <div class="sec">
+        <div class="sec-lbl">Identité</div>
+        <div class="f"><label>Prénom</label><input id="f-prenom" oninput="go()" placeholder="Armel"></div>
+        <div class="r2">
+          <div class="f"><label>Nom</label><input id="f-nom" oninput="go()" placeholder="Manzambi"></div>
+          <div class="f"><label>Post-nom</label><input id="f-postnom" oninput="go()" placeholder="Kiese"></div>
+        </div>
+        <div class="f"><label>Titre / Poste</label><input id="f-titre" oninput="go()" placeholder="Chargé du Numérique"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-lbl">Contact</div>
+        <div class="f"><label>Téléphone 1</label><input id="f-tel1" oninput="go()" placeholder="+243 993 124 671"></div>
+        <div class="f"><label>Téléphone 2 <span class="opt-chip">optionnel</span></label><input id="f-tel2" oninput="go()" placeholder="+243 ..."></div>
+        <div class="f"><label>Adresse e-mail</label><input id="f-email" oninput="go()" placeholder="armel.manzambi@fondsocial.cd"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-lbl">Verrouillés</div>
+        <div class="f"><label>Structure <span class="lock-chip">fixe</span></label><input class="lk" id="f-org" value="Fonds Social de la RDC (FSRDC)" readonly></div>
+        <div class="f"><label>Site web <span class="lock-chip">fixe</span></label><input class="lk" id="f-site" value="www.fondsocial.cd" readonly></div>
+        <div class="f"><label>Adresse <span class="lock-chip">fixe</span></label><textarea class="lk" id="f-adresse" readonly>145, Colonel Mondjiba, Chanic Eléphant, Commune de NGALIEMA, KINSHASA – RDC</textarea></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-lbl">Logo au centre du QR</div>
+        <div class="logo-row">
+          <div class="logo-prev" id="logo-prev"><img id="logo-prev-img" alt="Logo"></div>
+          <div class="logo-actions">
+            <label class="mini-btn" for="f-logo-upload">Changer le logo</label>
+            <button class="mini-btn reset" onclick="resetLogo()">Sceau RDC (défaut)</button>
+          </div>
+          <input type="file" id="f-logo-upload" accept="image/*" style="display:none" onchange="onLogoUpload(event)">
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="pv-head">
+      <div class="pv-lbl">Aperçu - QR code contact</div>
+      <div class="pv-badge">Synchronisé en temps réel</div>
+    </div>
+    <div class="pv-card">
+      <div class="qr-stage">
+        <div class="qr-box" id="qr-box" style="display:none"><canvas id="qr-canvas" width="440" height="440"></canvas></div>
+        <div class="qr-empty" id="qr-empty">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20v.01"/></svg>
+          <span>Renseignez au minimum le nom, le prénom<br>et un moyen de contact pour générer le QR code.</span>
+        </div>
+
+        <div class="card-mock">
+          <div class="cm-stripe"><div style="background:#2E86AB"></div><div style="background:#F4C542"></div><div style="background:#C8001A"></div></div>
+          <div id="cm-body"><div class="cm-empty">Aperçu de la carte de contact...</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="chk-row">
+        <input type="checkbox" id="f-transparent">
+        <label for="f-transparent">Fond transparent (PNG)</label>
+      </div>
+      <button class="btn btn-p" id="btn-png" onclick="downloadPNG()" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Télécharger le QR code (PNG)
+      </button>
+      <button class="btn btn-s" id="btn-vcf" onclick="downloadVCF()" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Télécharger la fiche de contact (.vcf)
+      </button>
+    </div>
+    <div class="steps">
+      <div class="steps-title">Comment ça marche</div>
+      <div class="step"><div class="step-num">1</div><div>Remplissez le formulaire à gauche - le QR code se génère <strong>automatiquement</strong> avec le logo au centre.</div></div>
+      <div class="step"><div class="step-num">2</div><div>Cliquez sur <strong>« Télécharger le QR code »</strong> et insérez l'image sur votre carte de visite (imprimée ou numérique).</div></div>
+      <div class="step"><div class="step-num">3</div><div>En scannant le code avec l'appareil photo d'un smartphone, le contact est proposé <strong>directement à l'enregistrement</strong> - aucune app requise.</div></div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-c"><div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg">Téléchargé !</span>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script>
+const DEFAULT_LOGO = '/qrcode/sceau-rdc.png';
+const logoImg = new Image();
+let logoReady = false;
+let currentVCard = '';
+let currentSlug = 'contact-fsrdc';
+let debounceId = null;
+
+function loadLogo(src){
+  logoReady = false;
+  logoImg.onload = function(){ logoReady = true; document.getElementById('logo-prev-img').src = src; go(); };
+  logoImg.onerror = function(){ logoReady = false; };
+  logoImg.src = src;
+}
+function resetLogo(){ document.getElementById('f-logo-upload').value=''; loadLogo(DEFAULT_LOGO); }
+function onLogoUpload(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){ loadLogo(ev.target.result); };
+  reader.readAsDataURL(file);
+}
+
+function val(id){ return document.getElementById(id).value.trim(); }
+
+function escVCard(s){ return (s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n'); }
+
+function slugify(s){
+  return (s||'contact-fsrdc').toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'') || 'contact-fsrdc';
+}
+
+function buildVCard(){
+  const nom = val('f-nom'), postnom = val('f-postnom'), prenom = val('f-prenom');
+  const titre = val('f-titre'), tel1 = val('f-tel1'), tel2 = val('f-tel2');
+  const email = val('f-email'), adresse = val('f-adresse');
+  const org = val('f-org'), site = val('f-site');
+  const fullName = [prenom, nom, postnom].filter(Boolean).join(' ') || 'Contact FSRDC';
+
+  const lines = ['BEGIN:VCARD','VERSION:3.0'];
+  lines.push(`N:${escVCard(nom)};${escVCard(prenom)};${escVCard(postnom)};;`);
+  lines.push(`FN:${escVCard(fullName)}`);
+  if(org) lines.push(`ORG:${escVCard(org)}`);
+  if(titre) lines.push(`TITLE:${escVCard(titre)}`);
+  if(tel1) lines.push(`TEL;TYPE=CELL,VOICE:${escVCard(tel1)}`);
+  if(tel2) lines.push(`TEL;TYPE=CELL,VOICE:${escVCard(tel2)}`);
+  if(email) lines.push(`EMAIL;TYPE=INTERNET:${escVCard(email)}`);
+  if(site) lines.push(`URL:${escVCard(/^https?:\/\//i.test(site) ? site : 'https://' + site)}`);
+  if(adresse) lines.push(`ADR;TYPE=WORK:;;${escVCard(adresse)};;;;`);
+  lines.push('END:VCARD');
+  return { text: '﻿' + lines.join('\r\n'), fullName };
+}
+
+function drawLogoOnCanvas(canvas){
+  if(!logoReady) return;
+  const ctx = canvas.getContext('2d');
+  const size = canvas.width;
+  const cx = size/2, cy = size/2;
+  const r = Math.round(size*0.25)/2;
+  const haloR = r * 1.06;
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(10,31,61,.3)';
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetY = 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, haloR, 0, Math.PI*2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.restore();
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.closePath();
+  ctx.clip();
+  const scale = Math.max((r*2)/logoImg.naturalWidth, (r*2)/logoImg.naturalHeight);
+  const w = logoImg.naturalWidth*scale, h = logoImg.naturalHeight*scale;
+  ctx.drawImage(logoImg, cx-w/2, cy-h/2, w, h);
+  ctx.restore();
+}
+
+function updateCardMock(){
+  const nom = val('f-nom'), postnom = val('f-postnom'), prenom = val('f-prenom');
+  const titre = val('f-titre'), tel1 = val('f-tel1'), tel2 = val('f-tel2');
+  const email = val('f-email'), adresse = val('f-adresse');
+  const fullName = [prenom, nom, postnom].filter(Boolean).join(' ');
+  const body = document.getElementById('cm-body');
+
+  if(!fullName){
+    body.innerHTML = '<div class="cm-empty">Aperçu de la carte de contact...</div>';
+    return;
+  }
+  let rows = '';
+  if(tel1) rows += `<div class="cm-row"><b>Tel</b><span>${tel1}${tel2 ? ' / ' + tel2 : ''}</span></div>`;
+  if(email) rows += `<div class="cm-row"><b>Mail</b><span>${email}</span></div>`;
+  if(adresse) rows += `<div class="cm-row"><b>Adr</b><span>${adresse}</span></div>`;
+  body.innerHTML = `<div class="cm-name">${fullName}</div><div class="cm-title">${titre || ''}</div>${rows}`;
+}
+
+function go(){
+  clearTimeout(debounceId);
+  debounceId = setTimeout(render, 120);
+}
+
+function render(){
+  updateCardMock();
+  const nom = val('f-nom'), prenom = val('f-prenom');
+  const hasContact = val('f-tel1') || val('f-email');
+  const ready = nom && prenom && hasContact;
+
+  const box = document.getElementById('qr-box');
+  const empty = document.getElementById('qr-empty');
+  const btnPng = document.getElementById('btn-png');
+  const btnVcf = document.getElementById('btn-vcf');
+
+  if(!ready){
+    box.style.display = 'none';
+    empty.style.display = 'flex';
+    btnPng.disabled = true;
+    btnVcf.disabled = true;
+    return;
+  }
+
+  const { text, fullName } = buildVCard();
+  currentVCard = text;
+  currentSlug = slugify(fullName);
+
+  const canvas = document.getElementById('qr-canvas');
+  if(typeof QRCode === 'undefined'){
+    empty.style.display = 'flex';
+    empty.querySelector('span').textContent = "Impossible de charger le générateur de QR code (connexion réseau requise).";
+    box.style.display = 'none';
+    return;
+  }
+
+  renderQRToCanvas(canvas, text, false, function(err){
+    if(err){ console.error(err); return; }
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    box.style.display = 'flex';
+    empty.style.display = 'none';
+    btnPng.disabled = false;
+    btnVcf.disabled = false;
+  });
+}
+
+function renderQRToCanvas(canvas, text, transparent, cb){
+  QRCode.toCanvas(canvas, text, {
+    errorCorrectionLevel: 'H',
+    margin: 2,
+    width: 440,
+    color: { dark: '#000000FF', light: transparent ? '#FFFFFF00' : '#FFFFFFFF' }
+  }, function(err){
+    if(err) return cb(err);
+    drawLogoOnCanvas(canvas);
+    cb(null);
+  });
+}
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('on');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(()=>t.classList.remove('on'), 2200);
+}
+
+function downloadPNG(){
+  const transparent = document.getElementById('f-transparent').checked;
+
+  function finish(canvas){
+    canvas.toBlob(function(blob){
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = currentSlug + '-qr-contact.png';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('QR code téléchargé !');
+    }, 'image/png');
+  }
+
+  if(!transparent){
+    finish(document.getElementById('qr-canvas'));
+    return;
+  }
+
+  const offscreen = document.createElement('canvas');
+  offscreen.width = 440;
+  offscreen.height = 440;
+  renderQRToCanvas(offscreen, currentVCard, true, function(err){
+    if(err){ console.error(err); return; }
+    finish(offscreen);
+  });
+}
+
+function downloadVCF(){
+  const blob = new Blob([currentVCard], { type: 'text/vcard;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = currentSlug + '.vcf';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Fiche de contact téléchargée !');
+}
+
+loadLogo(DEFAULT_LOGO);
+</script>
+</body>
+</html>
